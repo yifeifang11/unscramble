@@ -1,70 +1,74 @@
-const express = require('express');
-const axios = require('axios');
+const express = require("express");
+const bodyparser = require('body-parser');
 const cors = require('cors');
-const app = express();
+const axios = require('axios');
+
 const PORT = process.env.PORT || 5000;
 
-app.use(cors()); // for front end communication with backend
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-let score = 0;
-let data = '';
-let guess = '';
+app.use(bodyparser.urlencoded({ extended: true }))
+app.use(bodyparser.json())
+
+let guess = 'not answer';
+let message = 'Guess the word!';
+let answer = '';
+let count = 0;
+
+app.get('/count', (req, res) => {
+  res.send(`${count}`);
+});
+
+app.post('/count', (req, res) => {
+  count = req.body.count;
+  console.log(count);
+})
+
+app.get('/api', (req, res) => {
+    res.send(answer);
+});
+
+app.get('/guess', (req, res) => {
+  res.send(guess);
+});
+
+app.post('/guess', (req, res) => {
+    guess = req.body.answered;
+    console.log(guess, answer, guess == answer);
+    if (guess == answer) {
+      message = 'Wow! You got it!';
+    } else {
+      message = 'Incorrect dumbass. Try again!';
+    }
+});
+
+app.get('/message', (req, res) => {
+  if (count == 0) {
+    res.send('Guess the word!');
+  } else {
+    res.send(message);
+  }
+});
 
 let config = {
   method: 'get',
   maxBodyLength: Infinity,
   url: 'https://random-word-api.herokuapp.com/word',
-  headers: { },
-  data : data
+  headers: { }
 };
 
-axios.request(config)
+
+  axios.request(config)
 .then((response) => {
-  data = JSON.stringify(response.data).slice(2, JSON.stringify(response.data).length-2);
+  answer = (response.data[0]);
 })
 .catch((error) => {
   console.log(error);
 });
 
-app.get('/score', (req, res) => {
-    res.send(`${score}`);
-});
-
-app.patch('/score', (req, res) => {
-    score += parseInt(req.query.val);
-    res.status(200).send(`${score}`);
-}); // patch might be used to send guess of word with status codes
-
-app.get('/word', (req, res) => {
-    res.send(scramble(data));
-});
-
-app.get('/answer', (req, res) => {
-  res.send(data);
-})
-
-function scramble(word) {
-    strarray = word.split('');           
-    var i,j,k
-    for (i = 0; i < strarray.length; i++) {
-      j = Math.floor(Math.random() * i)
-      k = strarray[i]
-      strarray[i] = strarray[j]
-      strarray[j] = k
-    }
-    word = strarray.join('');  
-    return word;
-  }
-
-app.get('/guess', (req, res) => {
-    res.send(guess);
-});
-
-app.patch('/guess', (req, res) => {
-    guess = req.query.guess;
-    res.status(200).send(guess);
-});
 
 app.listen(PORT, () => {
-    console.log(`Backend is running on http://localhost:${PORT}`);
+  console.log(`Server listening on ${PORT}`);
 });
