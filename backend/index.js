@@ -12,8 +12,8 @@ app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
 
-let guess = 'not answer';
-let message = 'Guess the word!';
+let guess = '';
+let message = '';
 let answer = '';
 let count = 0;
 
@@ -23,33 +23,41 @@ app.get('/count', (req, res) => {
 
 app.post('/count', (req, res) => {
   count = req.body.count;
-  console.log(count);
 })
 
 app.get('/api', (req, res) => {
+  
     res.send(answer);
 });
 
-app.get('/guess', (req, res) => {
-  res.send(guess);
+app.post('/api', (req, res) => {
+  axios.request(config)
+  .then((response) => {
+    answer = (response.data[0]);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 });
+
+
+// app.get('/guess', (req, res) => {
+//   res.send(guess);
+// });
 
 app.post('/guess', (req, res) => {
     guess = req.body.answered;
-    console.log(guess, answer, guess == answer);
-    if (guess == answer) {
-      message = 'Wow! You got it!';
-    } else {
-      message = 'Incorrect dumbass. Try again!';
-    }
 });
 
 app.get('/message', (req, res) => {
   if (count == 0) {
-    res.send('Guess the word!');
+    message = 'Guess the word!';
+  } else if (guess == answer ){
+    message = 'Wow! You got it!';
   } else {
-    res.send(message);
+    message = 'Incorrect, dumbass. Try again.';
   }
+  res.send(message);
 });
 
 let config = {
