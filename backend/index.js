@@ -12,52 +12,87 @@ app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+let score = 0;
 let guess = '';
-let message = '';
 let answer = '';
-let count = 0;
+let nextAnswer = '';
+let message = 'Guess the word';
 
-app.get('/count', (req, res) => {
-  res.send(`${count}`);
+app.get('/score', (req, res) => {
+    res.send(`${score}`);
 });
 
-app.post('/count', (req, res) => {
-  count = req.body.count;
-})
-
-app.get('/api', (req, res) => {
-  
-    res.send(answer);
-});
-
-app.post('/api', (req, res) => {
-  axios.request(config)
-  .then((response) => {
-    answer = (response.data[0]);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-});
-
-
-// app.get('/guess', (req, res) => {
-//   res.send(guess);
-// });
-
-app.post('/guess', (req, res) => {
-    guess = req.body.answered;
+app.post('/score', (req, res) => {
+    score = req.body.count;
+    res.send(`${score}`);
 });
 
 app.get('/message', (req, res) => {
-  if (count == 0) {
-    message = 'Guess the word!';
-  } else if (guess == answer ){
-    message = 'Wow! You got it!';
-  } else {
-    message = 'Incorrect, dumbass. Try again.';
-  }
-  res.send(message);
+    res.send(message);
+});
+
+app.post('/message', (req, res) => {
+    let temp = req.body.guessedWord;
+    console.log(temp, answer);
+    if (score == 0) {
+        message = 'Guess the word'
+        res.end(message);
+    } else if (temp === answer) {
+        message = 'Good job';
+    } else if (temp !== answer) {
+        message = 'Try again';
+    }
+    res.send(message);
+});
+
+app.get('/guess', (req, res) => {
+    res.send(guess);
+});
+
+app.post('/guess', (req, res) => {
+    guess = req.body.guessedWord;
+    res.send(guess);
+});
+
+app.get('/answer', (req, res) => {
+     
+        console.log(answer);
+
+    res.send(answer);
+});
+
+app.post('/answer', (req, res) => {
+//     axios.request(config)
+// .then((response) => {
+//   answer = response.data[0];
+// })
+// .catch((error) => {
+//   console.log(error);
+// });
+//     res.send(answer);
+    answer = nextAnswer;
+    res.send(answer);
+});
+
+app.get('/nextAnswer', (req, res) => {
+    res.send(nextAnswer);
+});
+
+app.post('/nextAnswer', (req, res) => {
+    axios.request(config)
+.then((response) => {
+  nextAnswer = response.data[0];
+})
+.catch((error) => {
+  console.log(error);
+});
+    res.send(nextAnswer);
 });
 
 let config = {
@@ -67,10 +102,17 @@ let config = {
   headers: { }
 };
 
-
-  axios.request(config)
+axios.request(config)
 .then((response) => {
-  answer = (response.data[0]);
+  answer = response.data[0];
+})
+.catch((error) => {
+  console.log(error);
+});
+
+axios.request(config)
+.then((response) => {
+  nextAnswer = response.data[0];
 })
 .catch((error) => {
   console.log(error);
@@ -78,5 +120,5 @@ let config = {
 
 
 app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+    console.log(`Server listening on ${PORT}`);
+  });
