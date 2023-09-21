@@ -30,6 +30,19 @@ let disabled = false;
 let isSane = false;
 let score = 0;
 let sanity = 5;
+let wrong = 0;
+
+app.get("/wrong", (req, res) => {
+    res.send(`${wrong}`);
+});
+
+app.post("/wrong", (req, res) => {
+    let temp = req.body.guessedWord;
+    if (temp !== answer) {
+      wrong = wrong + 1;
+    }
+    res.send(`${wrong}`);
+  });
 
 app.get("/score", (req, res) => {
   res.send(`${score}`);
@@ -37,7 +50,7 @@ app.get("/score", (req, res) => {
 
 app.post("/score", (req, res) => {
   let temp = req.body.guessedWord;
-  if (temp === 'big chungus the greatest of them all!') {
+  if (temp === "big chungus the greatest of them all!") {
     score = 0;
   }
   if (temp === answer) {
@@ -56,12 +69,15 @@ app.post("/sanity", (req, res) => {
     // sanity = sanity + (Math.floor(Math.random() * 20) + 1);
     sanity = sanity + 60;
     if (sanity > 99) {
-        sanity = 100;
+      sanity = 100;
     }
-  } else if (temp === 'big chungus the greatest of them all!') {
+  } else if (temp === "big chungus the greatest of them all!") {
     sanity = 5;
   } else {
     sanity = sanity - 1;
+    if (sanity < 0) {
+        sanity = 0;
+    }
   }
   res.send(`${sanity}`);
 });
