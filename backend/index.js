@@ -37,6 +37,9 @@ app.get("/score", (req, res) => {
 
 app.post("/score", (req, res) => {
   let temp = req.body.guessedWord;
+  if (temp === 'big chungus the greatest of them all!') {
+    score = 0;
+  }
   if (temp === answer) {
     score = score + 1;
   }
@@ -52,6 +55,11 @@ app.post("/sanity", (req, res) => {
   if (temp === answer) {
     // sanity = sanity + (Math.floor(Math.random() * 20) + 1);
     sanity = sanity + 60;
+    if (sanity > 99) {
+        sanity = 100;
+    }
+  } else if (temp === 'big chungus the greatest of them all!') {
+    sanity = 5;
   } else {
     sanity = sanity - 1;
   }

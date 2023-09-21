@@ -14,7 +14,6 @@ function App() {
   const [hideHint2, setHideHint2] = useState(true);
   const [isSane, setIsSane] = useState(false);
   const [scrambled, setScrambled] = useState("");
-  const [title, setTitle] = useState("EKREB");
 
   useEffect(() => {
     fetch("/count")
@@ -167,27 +166,10 @@ function App() {
         console.error(error);
       });
 
-    // fetch("/isSane", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     sanity: parseInt(sanity),
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setIsSane(data.isSane);
-    //     console.log(data.isSane);
-    //     return;
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-
     setUpdate(update + 1);
   };
 
-  const resetGame = (event) => {
+  const newWord = (event) => {
     event.preventDefault();
 
     fetch("/count", {
@@ -273,6 +255,53 @@ function App() {
     setHideHint2(true);
   };
 
+  const resetGame = (event) => {
+    event.preventDefault();
+    newWord(event);
+
+    fetch("/score", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ guessedWord: "big chungus the greatest of them all!" }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setScore(parseInt(data));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    
+    fetch("/sanity", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ guessedWord: "big chungus the greatest of them all!" }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setSanity(parseInt(data));
+        fetch("/isSane", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sanity: parseInt(data),
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setIsSane(data.isSane);
+            console.log(data.isSane);
+            return;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   return (
     <div className="App">
       <h1>{isSane ? "BERKE" : "EKREB"}</h1>
@@ -290,7 +319,6 @@ function App() {
       <p>Guess: {guess}</p>
       <p>Scrambled word: {scrambled}</p>
       <p>Message: {message}</p>
-      <p>Is sane: {isSane}</p>
       <button onClick={() => setHideHint1(!hideHint1)}>
         {hideHint1 ? "Show hint 1" : "Hide hint 1"}
       </button>
@@ -302,11 +330,11 @@ function App() {
         {hideHint2 ? "" : `The last letter is '${answer[answer.length - 1]}'`}
       </p>
       <p>Answer: {answer}</p>
-      <button disabled={disable} onClick={resetGame}>
+      <button disabled={disable} onClick={newWord}>
         Give up
       </button>
 
-      <form name="form" onSubmit={disable ? resetGame : sendGuess}>
+      <form name="form" onSubmit={disable ? newWord : sendGuess}>
         <input
           type="text"
           name="guess"
@@ -317,8 +345,13 @@ function App() {
         <input
           type="submit"
           value={disable ? "Guess new word" : "Submit"}
+          disabled={isSane}
         ></input>
       </form>
+
+      <div>
+        {isSane ? <button onClick={resetGame}>Restart game</button> : ''}
+      </div>
     </div>
   );
 }
