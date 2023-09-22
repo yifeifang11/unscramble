@@ -3,21 +3,13 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "glitch";
-  src: url("../assets/glitch.otf");
-}
-
-@font-face {
-  font-family: "parametric";
-  src: url("../assets/parametric.ttf");
+  font-family: "daniels";
+  src: url("../assets/daniels.ttf");
 }
 
 @layer base {
-  #title {
-    font-family: "glitch", system-ui, sans-serif;
-  }
-  .param {
-    font-family: "parametric", system-ui, sans-serif;
+  .daniels {
+    font-family: "daniels", system-ui, sans-serif;
   }
 }
 

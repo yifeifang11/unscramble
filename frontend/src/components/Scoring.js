@@ -3,7 +3,7 @@ import "../index.css";
 
 const Scoring = ({ sanity, score }) => {
   return (
-    <div className="param text-center flex flex-col items-center">
+    <div className="daniels text-center flex flex-col items-center">
       <div>
         <div className="flex mt-5 outline outline-2">
           {[...Array(sanity)].map(() => (

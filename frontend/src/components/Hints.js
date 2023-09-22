@@ -13,7 +13,7 @@ const Hints = ({
   setHideAnswer,
 }) => {
   return (
-    <div className="param text-center flex flex-col items-center">
+    <div className="daniels text-center flex flex-col items-center">
       <button
         className="border border-1 px-3 py-1 rounded-md my-1"
         onClick={() => setHideHint1(!hideHint1)}

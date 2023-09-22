@@ -3,7 +3,7 @@ import "../index.css";
 
 const Completed = ({ sanity, score, numWrong, resetGame }) => {
   return (
-    <div className="text-center pt-10 flex flex-col items-center">
+    <div className="daniels text-center pt-10 flex flex-col items-center">
       <h1 className="text-5xl mb-5">BERKE</h1>
       <p>
         Ekreb figured out his name! It is Berke! Berke is very grateful for your

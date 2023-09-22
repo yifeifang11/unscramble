@@ -22,7 +22,7 @@ const Game = ({
   };
 
   return (
-    <div className="param text-center flex flex-col items-center">
+    <div className="daniels text-center flex flex-col items-center">
       <p className="text-xl mt-3">{message}</p>
       <p className="text-3xl my-3">{disable ? answer : scrambled}</p>
 

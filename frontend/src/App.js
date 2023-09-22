@@ -6,6 +6,9 @@ import Scoring from "./components/Scoring";
 import Game from "./components/Game";
 import Hints from "./components/Hints";
 import Completed from "./components/Completed";
+import useSound from "use-sound";
+import correctSoundFile from "./sounds/correct.wav";
+import wrongSoundFile from "./sounds/wrong.wav";
 
 function App() {
   // state
@@ -22,6 +25,9 @@ function App() {
   const [isSane, setIsSane] = useState(false);
   const [scrambled, setScrambled] = useState("");
   const [numWrong, setNumWrong] = useState(0);
+
+  const [correctSound] = useSound(correctSoundFile);
+  const [wrongSound] = useSound(wrongSoundFile);
 
   useEffect(() => {
     // keeps track of number of correct guesses
@@ -84,7 +90,14 @@ function App() {
       body: JSON.stringify({ guessedWord: guess }),
     })
       .then((response) => response.text())
-      .then((data) => setMessage(data))
+      .then((data) => {
+        setMessage(data);
+        if (data === "Good job! Click 'Guess new word' to keep guessing!") {
+          correctSound();
+        } else {
+          wrongSound();
+        }
+      })
       .catch((error) => console.error(error));
 
     // retrieves guess to maintain current user guess in textbox

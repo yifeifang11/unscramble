@@ -3,7 +3,7 @@ import "../index.css";
 
 const Header = () => {
   return (
-    <div className="param text-center pt-10 flex flex-col items-center">
+    <div className="daniels text-center pt-10 flex flex-col items-center">
       <h1 id="title" className="text-5xl mb-5">
         EKREB
       </h1>
