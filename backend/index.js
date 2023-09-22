@@ -12,20 +12,21 @@ app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
-let guess = "";
-let answer = "";
-let nextAnswer = "";
-let message = "Guess the word!";
-let disabled = false;
-let isSane = false;
-let score = 0;
-let sanity = 5;
-let wrong = 0;
+let guess = ""; // user guess
+let answer = ""; // word user is trying to guess
+let nextAnswer = ""; // next answer to be retrieved from api
+let message = "Guess the word!"; // message displayed to user
+let disabled = false; // controls whether user can submit or not
+let isSane = false; // controls when game is completed
+let score = 0; // number of correct guesses
+let sanity = 5; // amount of sanity
+let wrong = 0; // number of wrong guesses
 
 app.get("/wrong", (req, res) => {
   res.send(`${wrong}`);
 });
 
+// increments wrong if answer is incorrect, resets wrong if special string is passed
 app.post("/wrong", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === "big chungus the greatest of them all!") {
@@ -40,6 +41,7 @@ app.get("/score", (req, res) => {
   res.send(`${score}`);
 });
 
+// increments score if answer is correct, resets count if special string is passed
 app.post("/score", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === "big chungus the greatest of them all!") {
@@ -55,6 +57,8 @@ app.get("/sanity", (req, res) => {
   res.send(`${sanity}`);
 });
 
+// increments sanity by random number between 1 and 20 inclusive when correct answer is given
+// decrements sanity by 1 if incorrect answer is given
 app.post("/sanity", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === answer) {
@@ -77,6 +81,7 @@ app.get("/isSane", (req, res) => {
   res.send({ sanity: isSane });
 });
 
+// completes game if sanity is 100 or higher
 app.post("/isSane", (req, res) => {
   let temp = req.body.sanity;
   isSane = temp > 99;
@@ -87,6 +92,7 @@ app.get("/disabled", (req, res) => {
   res.send({ disable: disabled });
 });
 
+// disables submit button when correct answer is given
 app.post("/disabled", (req, res) => {
   let temp = req.body.guessedWord;
   disabled = temp === answer;
@@ -97,6 +103,8 @@ app.get("/message", (req, res) => {
   res.send(message);
 });
 
+// sends user default message when new answer is retrieved
+// sends user correct or incorrect message based on the guess
 app.post("/message", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === "big chungus the greatest of them all!") {
@@ -132,6 +140,7 @@ app.get("/nextAnswer", (req, res) => {
   res.send(nextAnswer);
 });
 
+// retrieves next answer in advance to resolve loading errors when retrieving from api
 app.post("/nextAnswer", (req, res) => {
   axios
     .request(config)
@@ -148,6 +157,7 @@ app.get("/scrambled", (req, res) => {
   res.send(scramble(answer));
 });
 
+// scramble function
 function scramble(word) {
   strarray = word.split("");
   var i, j, k;
@@ -161,6 +171,7 @@ function scramble(word) {
   return word;
 }
 
+// axios config to retrieve word from api
 let config = {
   method: "get",
   maxBodyLength: Infinity,
@@ -168,6 +179,7 @@ let config = {
   headers: {},
 };
 
+// initial api retrieval
 axios
   .request(config)
   .then((response) => {
@@ -177,6 +189,7 @@ axios
     console.log(error);
   });
 
+// initial api retrieval for next answer
 axios
   .request(config)
   .then((response) => {
