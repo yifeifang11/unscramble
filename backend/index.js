@@ -12,16 +12,6 @@ app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
-let count = 0;
 let guess = "";
 let answer = "";
 let nextAnswer = "";
@@ -33,16 +23,18 @@ let sanity = 5;
 let wrong = 0;
 
 app.get("/wrong", (req, res) => {
-    res.send(`${wrong}`);
+  res.send(`${wrong}`);
 });
 
 app.post("/wrong", (req, res) => {
-    let temp = req.body.guessedWord;
-    if (temp !== answer) {
-      wrong = wrong + 1;
-    }
-    res.send(`${wrong}`);
-  });
+  let temp = req.body.guessedWord;
+  if (temp === "big chungus the greatest of them all!") {
+    wrong = 0;
+  } else if (temp !== answer) {
+    wrong = wrong + 1;
+  }
+  res.send(`${wrong}`);
+});
 
 app.get("/score", (req, res) => {
   res.send(`${score}`);
@@ -67,7 +59,6 @@ app.post("/sanity", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === answer) {
     sanity = sanity + (Math.floor(Math.random() * 20) + 1);
-    //sanity = sanity + 60;
     if (sanity > 99) {
       sanity = 100;
     }
@@ -76,7 +67,7 @@ app.post("/sanity", (req, res) => {
   } else {
     sanity = sanity - 1;
     if (sanity < 0) {
-        sanity = 0;
+      sanity = 0;
     }
   }
   res.send(`${sanity}`);
@@ -100,15 +91,6 @@ app.post("/disabled", (req, res) => {
   let temp = req.body.guessedWord;
   disabled = temp === answer;
   res.send({ disable: disabled });
-});
-
-app.get("/count", (req, res) => {
-  res.send(`${count}`);
-});
-
-app.post("/count", (req, res) => {
-  count = req.body.count;
-  res.send(`${count}`);
 });
 
 app.get("/message", (req, res) => {
