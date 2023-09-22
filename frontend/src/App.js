@@ -13,6 +13,7 @@ function App() {
   const [disable, setDisable] = useState(false);
   const [hideHint1, setHideHint1] = useState(true);
   const [hideHint2, setHideHint2] = useState(true);
+  const [hideAnswer, setHideAnswer] = useState(true);
   const [isSane, setIsSane] = useState(false);
   const [scrambled, setScrambled] = useState("");
   const [numWrong, setNumWrong] = useState(0);
@@ -291,6 +292,7 @@ function App() {
 
     setHideHint1(true);
     setHideHint2(true);
+    setHideAnswer(true);
   };
 
   const resetGame = (event) => {
@@ -353,8 +355,8 @@ function App() {
   return (
     <div className="App">
       {isSane ? (
-        <div className="">
-          <h1>BERKE</h1>
+        <div className="text-center pt-10 flex flex-col items-center">
+          <h1 className="text-5xl mb-5">BERKE</h1>
           <p>
             Ekreb figured out his name! It is Berke! Berke is very grateful for
             your help.
@@ -362,14 +364,26 @@ function App() {
           <p>
             You can replay the game by hitting reset game. Thanks for playing!
           </p>
-          <p className="">Stats:</p>
-          <p>Number of correct guesses made: {score}</p>
-          <p>Number of wrong guesses made: {numWrong}</p>
-          <button onClick={resetGame}>Restart game</button>
+          <div>
+            <div className="flex mt-5 outline outline-2">
+              {[...Array(sanity)].map(() => (
+                <div
+                  className="w-1 h-5 rainbow-bg"
+                ></div>
+              ))}
+              {[...Array(100 - sanity)].map(() => (
+                <div className="w-1 h-5 bg-white"></div>
+              ))}
+            </div>
+          </div>
+          <p className="mt-5 text-2xl mb-2">Stats</p>
+          <p>Correct: {score}</p>
+          <p className="mb-10">Wrong: {numWrong}</p>
+          <button className="border border-1 px-3 py-1 rounded-md my-1" onClick={resetGame}>Restart game</button>
         </div>
       ) : (
-        <div className="text-center pt-10 flex flex-col items-center">
-          <h1 className="text-5xl mb-5">EKREB</h1>
+        <div className="param text-center pt-10 flex flex-col items-center">
+          <h1 id="title"  className="text-5xl mb-5">EKREB</h1>
           <p>
             Ekreb is having an identity crisis and can't figure out his name!
             Help him unscramble his name by unscrambling the words he gives you.
@@ -378,7 +392,7 @@ function App() {
             Every time you guess correctly, you restore some of his sanity. Make
             his sanity reach 100 to unscramble his name!
           </p>
-          <div className="">
+          <div>
             <div className="flex mt-5 outline outline-2">
               {[...Array(sanity)].map(() => (
                 <div
@@ -416,7 +430,7 @@ function App() {
               onChange={(e) => setGuess(e.target.value)}
               required={!disable}
             ></input>
-            <div className="inline">
+            <div className="flex flex-row-reverse mt-1">
               <input
                 className="inline-block border border-1 px-3 py-1 rounded-md my-1 mx-1 cursor-pointer"
                 type="submit"
@@ -449,7 +463,6 @@ function App() {
               ? ""
               : `The last letter is '${answer[answer.length - 1]}'`}
           </p>
-          <p>Answer: {answer}</p>
           <button
             className="inline-block border border-1 px-3 py-1 rounded-md my-1 mx-1"
             disabled={disable}
@@ -457,6 +470,13 @@ function App() {
           >
             Try another word
           </button>
+          <button
+            className="border border-1 px-3 py-1 rounded-md my-1"
+            onClick={() => setHideAnswer(!hideAnswer)}
+          >
+            {hideAnswer ? "Show answer" : "Hide answer"}
+          </button>
+          <p>{hideAnswer ? "" : `${answer}`}</p>
         </div>
       )}
     </div>
