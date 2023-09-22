@@ -25,7 +25,7 @@ let count = 0;
 let guess = "";
 let answer = "";
 let nextAnswer = "";
-let message = "Guess the word";
+let message = "Guess the word!";
 let disabled = false;
 let isSane = false;
 let score = 0;
@@ -66,8 +66,8 @@ app.get("/sanity", (req, res) => {
 app.post("/sanity", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === answer) {
-    // sanity = sanity + (Math.floor(Math.random() * 20) + 1);
-    sanity = sanity + 60;
+    sanity = sanity + (Math.floor(Math.random() * 20) + 1);
+    //sanity = sanity + 60;
     if (sanity > 99) {
       sanity = 100;
     }
@@ -118,12 +118,12 @@ app.get("/message", (req, res) => {
 app.post("/message", (req, res) => {
   let temp = req.body.guessedWord;
   if (temp === "big chungus the greatest of them all!") {
-    message = "Guess the word";
+    message = "Guess the word!";
     res.end(message);
   } else if (temp === answer) {
-    message = "Good job";
+    message = "Good job! Click 'Guess new word' to keep guessing!";
   } else if (temp !== answer) {
-    message = "Try again";
+    message = "Try again...";
   }
   res.send(message);
 });
