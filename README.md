@@ -25,3 +25,6 @@ I built an almost functional game before coming across issues with updating vari
 ### Feedback
 
 I wish there was maybe a bit more guidance on the general steps to take, but I am glad I had the chance to figure everything out by myself. The project was a great experience, and I feel more comfortable with backend and APIs now--I have learned a lot!--so thank you for your time and effort in designing the project (and grading).
+
+
+P.S. If you would like to make the game go faster, you can ctrl + F in the backend index.js file "sanity = sanity + 50" and uncomment it to replace it with the line above. The answer can also be shown in the game to make testing it easier.
