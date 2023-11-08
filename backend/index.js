@@ -3,7 +3,7 @@ const bodyparser = require("body-parser");
 const cors = require("cors");
 const axios = require("axios");
 
-const PORT = 5000;
+const PORT = 6000;
 
 const app = express();
 app.use(express.json());
@@ -54,7 +54,7 @@ app.post("/score", (req, res) => {
 });
 
 app.get("/sanity", (req, res) => {
-  res.send(`${sanity}`);
+  res.send({ sanity: sanity });
 });
 
 // increments sanity by random number between 1 and 20 inclusive when correct answer is given

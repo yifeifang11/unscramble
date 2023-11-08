@@ -31,38 +31,38 @@ function App() {
 
   useEffect(() => {
     // keeps track of number of correct guesses
-    fetch("/score")
+    fetch("https://ekreb-backend.onrender.com/score")
       .then((response) => response.text())
       .then((data) => setScore(data));
 
     // retrieves message displayed to the user (guess the word, try again, good job)
-    fetch("/message")
+    fetch("https://ekreb-backend.onrender.com/message")
       .then((response) => response.text())
       .then((data) => setMessage(data));
 
     // retrieves the answer to the scrambled word
-    fetch("/answer")
+    fetch("https://ekreb-backend.onrender.com/answer")
       .then((response) => response.text())
       .then((data) => setAnswer(data));
 
     // retrieves the scrambled version of the word
-    fetch("/scrambled")
+    fetch("https://ekreb-backend.onrender.com/scrambled")
       .then((response) => response.text())
       .then((data) => setScrambled(data));
 
     // retrieves the sanity count
-    fetch("/sanity")
+    fetch("https://ekreb-backend.onrender.com/sanity")
       .then((response) => response.json())
-      .then((data) => setSanity(data));
+      .then((data) => setSanity(data.sanity));
 
     // retrives whether the game is completed or not (whether sanity reached 100)
-    fetch("/isSane")
+    fetch("https://ekreb-backend.onrender.com/isSane")
       .then((response) => response.json())
       .then((data) => setIsSane(data.sanity));
 
     // retrieves boolean for whether the submit button is disabled or not
     // disabled when correct guess is made --> submit button will retrieve the next word instead
-    fetch("/disabled")
+    fetch("https://ekreb-backend.onrender.com/disabled")
       .then((response) => response.json())
       .then((data) => setDisable(data.disable));
   }, []);
@@ -73,7 +73,7 @@ function App() {
     event.preventDefault();
 
     // send guess to backend
-    fetch("/guess", {
+    fetch("https://ekreb-backend.onrender.com/guess", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: guess }),
@@ -84,7 +84,7 @@ function App() {
 
     // retrieve new message
     // message displays whether user was correct or incorrect
-    fetch("/message", {
+    fetch("https://ekreb-backend.onrender.com/message", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: guess }),
@@ -101,13 +101,13 @@ function App() {
       .catch((error) => console.error(error));
 
     // retrieves guess to maintain current user guess in textbox
-    fetch("/guess")
+    fetch("https://ekreb-backend.onrender.com/guess")
       .then((response) => response.text())
       .then((data) => setGuess(data));
 
     // sends guess to backend, retrieves whether submit button is disabled or not
 
-    fetch("/disabled", {
+    fetch("https://ekreb-backend.onrender.com/disabled", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: guess }),
@@ -118,7 +118,7 @@ function App() {
 
     // sends guess to backend, retrieves whether score should be incremented or not
 
-    fetch("/score", {
+    fetch("https://ekreb-backend.onrender.com/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: guess }),
@@ -129,7 +129,7 @@ function App() {
 
     // retrieves new sanity and boolean isSane (whether game is completed or not)
 
-    fetch("/sanity", {
+    fetch("https://ekreb-backend.onrender.com/sanity", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: guess }),
@@ -140,7 +140,7 @@ function App() {
 
         // determines if game is finished or not based on backend response
         // data contains new amount of sanity
-        fetch("/isSane", {
+        fetch("https://ekreb-backend.onrender.com/isSane", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -154,7 +154,7 @@ function App() {
       .catch((error) => console.error(error));
 
     // incremenets number of wrong guesses if guess is wrong
-    fetch("/wrong", {
+    fetch("https://ekreb-backend.onrender.com/wrong", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: guess }),
@@ -169,7 +169,7 @@ function App() {
     event.preventDefault();
 
     // retrieve new answer to be guessed
-    fetch("/answer", {
+    fetch("https://ekreb-backend.onrender.com/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     })
@@ -178,13 +178,13 @@ function App() {
       .catch((error) => console.error(error));
 
     // set up the next answer to be retrieved
-    fetch("/nextAnswer", {
+    fetch("https://ekreb-backend.onrender.com/nextAnswer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     }).catch((error) => console.error(error));
 
     // reset disabled so user can submit next word
-    fetch("/disabled", {
+    fetch("https://ekreb-backend.onrender.com/disabled", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: "" }),
@@ -194,7 +194,7 @@ function App() {
       .catch((error) => console.error(error));
 
     // set guess to empty string
-    fetch("/guess", {
+    fetch("https://ekreb-backend.onrender.com/guess", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guessedWord: "" }),
@@ -204,7 +204,7 @@ function App() {
       .catch((error) => console.error(error));
 
     // reset message displayed to user
-    fetch("/message", {
+    fetch("https://ekreb-backend.onrender.com/message", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -216,7 +216,7 @@ function App() {
       .catch((error) => console.error(error));
 
     // retrieve new scrambled word
-    fetch("/scrambled")
+    fetch("https://ekreb-backend.onrender.com/scrambled")
       .then((response) => response.text())
       .then((data) => setScrambled(data));
 
@@ -234,7 +234,7 @@ function App() {
     newWord(event);
 
     // reset score
-    fetch("/score", {
+    fetch("https://ekreb-backend.onrender.com/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -246,7 +246,7 @@ function App() {
       .catch((error) => console.error(error));
 
     // reset sanity to 5
-    fetch("/sanity", {
+    fetch("https://ekreb-backend.onrender.com/sanity", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -258,7 +258,7 @@ function App() {
         setSanity(parseInt(data));
 
         // reset isSane to false so game can restart
-        fetch("/isSane", {
+        fetch("https://ekreb-backend.onrender.com/isSane", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -272,7 +272,7 @@ function App() {
       .catch((error) => console.error(error));
 
     // reset number of wrong guesses
-    fetch("/wrong", {
+    fetch("https://ekreb-backend.onrender.com/wrong", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -322,6 +322,16 @@ function App() {
           />
         </div>
       )}
+      <p className="daniels text-center mt-10">
+        Check out the code{" "}
+        <a
+          className="underline"
+          href="https://github.com/yifeifang11/unscramble"
+        >
+          here
+        </a>
+        !
+      </p>
     </div>
   );
 }
