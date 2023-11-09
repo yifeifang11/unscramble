@@ -10,7 +10,7 @@ There are a few extra features beyond the minimum requirement, such as hints (gi
 
 After cloning the project, make sure to run 'npm install' in both the frontend and backend folders. To run the backend, run 'rpm run dev' and to run the frontend, run 'rpm run start'. Make sure the backend url is correct when running the frontend. If it is not, you can replace each instance of the current url with find and replace.
 
-See the project live here: https://ekreb.onrender.com.
+See the project live here: https://ekreb.onrender.com. If the backend does not load, please refresh the page a few times and wait a couple of minutes.
 
 ### Reflection
 
